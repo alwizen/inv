@@ -13,6 +13,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
+use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use PhpParser\Node\Stmt\Label;
@@ -53,12 +54,12 @@ class InvoiceResource extends Resource
 
 
                 Forms\Components\TextInput::make('recipient')
-                    ->label('Penerma'),
+                    ->label('Penerima'),
 
                 Forms\Components\TextInput::make('recipient_address')
                     ->label('Alamat'),
 
-                Forms\Components\Repeater::make('items')
+                TableRepeater::make('items')
                     ->relationship('items')
                     ->columnSpanFull()
                     ->schema([
