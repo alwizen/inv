@@ -5,6 +5,44 @@
     <meta charset="UTF-8">
     <title>Invoice #{{ $invoice->invoice_number }}</title>
     <style>
+        /* === Watermark Status === */
+        .wm-status {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-size: 90px;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 0;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        /* Pastikan konten tetap di atas watermark */
+        body>*:not(.wm-status) {
+            position: relative;
+            z-index: 2;
+        }
+
+
+        @media print {
+            .wm-status {
+                opacity: 0.08;
+            }
+
+            /* sedikit lebih tegas saat print */
+        }
+
+        /* Pastikan konten utama di atas watermark */
+        .container,
+        .top-section,
+        table,
+        .footer-note {
+            position: relative;
+            z-index: 1;
+        }
+
         .summary-table {
             width: 100%;
             border-collapse: collapse;
@@ -245,7 +283,7 @@
                     $logoPath = $invoice->company->logo_path_for_pdf;
                 @endphp
 
-                @if($logoPath)
+                @if ($logoPath)
                     <img src="{{ $logoPath }}" class="lh-logo" alt="{{ $invoice->company->name }}">
                 @elseif($invoice->company->logo_url)
                     {{-- fallback untuk preview HTML (kalau bukan PDF) --}}
@@ -267,11 +305,22 @@
 <body>
     <div class="container">
 
+        @php
+            $isPaid = $invoice->status === 'paid';
+            $labelWatermark = $isPaid ? 'PAID' : 'UNPAID';
+            $color = $isPaid
+                ? 'rgba(84, 214, 34, 0.52)' // hijau lembut
+                : 'rgba(81, 90, 78, 0.52)'; // abu lembut
+        @endphp
+
+        <div class="wm-status" style="color: {{ $color }}">{{ $labelWatermark }}</div>
+
+
         <!-- Top Section: Company Info & Invoice Meta -->
         <div class="top-section">
             <div class="top-info">
                 <div class="info-box">
-                    <div class="info-label">Invoice Number: #{{ $invoice->invoice_number}}</div>
+                    <div class="info-label">Invoice Number: #{{ $invoice->invoice_number }}</div>
                 </div><br>
 
                 <table class="table-info">
@@ -281,7 +330,7 @@
                     </tr>
                     <tr>
                         <td class="wrap-text">{{ $invoice->recipient_address }}</td>
-                        @if($invoice->due_date)
+                        @if ($invoice->due_date)
                             <td>Due Date: {{ $invoice->due_date->format('d/m/Y') }}</td>
                         @endif
                     </tr>
@@ -301,7 +350,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($invoice->items as $item)
+                    @foreach ($invoice->items as $item)
                         <tr>
                             <td>{{ $item->title }}</td>
                             <td class="numeric">{{ $item->quantity }}</td>
@@ -316,7 +365,7 @@
                         <td class="numeric">{{ number_format($invoice->subtotal, 0, ',', '.') }}</td>
                     </tr>
 
-                    @if($invoice->use_ppn)
+                    @if ($invoice->use_ppn)
                         {{-- <tr>
                             <td colspan="3" style="text-align: right;">Total excl. VAT</td>
                             <td class="numeric">{{ number_format($invoice->subtotal, 0, ',', '.') }}</td>

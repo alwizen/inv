@@ -20,7 +20,10 @@ class Invoice extends Model
         'total',
         'due_date',
         'recipient_address',
-        'recipient'
+        'recipient',
+        'status',
+        'transaction_number',
+        'paid_at'
     ];
 
     protected $casts = [
@@ -58,6 +61,11 @@ class Invoice extends Model
         } while (static::where('invoice_number', $invoiceNumber)->exists());
 
         return $invoiceNumber;
+    }
+
+    public static function generateTransactionNumber(): string
+    {
+        return str_pad(random_int(0, 9999999999), 11, '0', STR_PAD_LEFT);
     }
 
     protected static function boot(): void

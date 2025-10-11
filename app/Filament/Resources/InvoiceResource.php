@@ -118,6 +118,13 @@ class InvoiceResource extends Resource
                 Tables\Columns\ToggleColumn::make('use_ppn')
                     ->label('PPN'),
 
+                Tables\Columns\TextColumn::make('status')
+                    ->label('status')
+                    ->badge(),
+
+                Tables\Columns\TextColumn::make('transaction_number')
+                    ->label('numb'),
+
                 Tables\Columns\TextColumn::make('total')
                     ->label('Total')
                     ->summarize(Sum::make()
@@ -140,6 +147,16 @@ class InvoiceResource extends Resource
                     ->icon('heroicon-o-printer')
                     ->url(fn(Invoice $record) => route('invoice.pdf', $record))
                     ->openUrlInNewTab(),
+                Action::make('markAsPaid')
+                    ->label('Mark as Paid')
+                    ->requiresConfirmation()
+                    ->visible(fn(Invoice $record) => $record->status === 'unpaid')
+                    ->action(function (Invoice $record) {
+                        $record->status = 'paid';
+                        $record->transaction_number = Invoice::generateTransactionNumber();
+                        $record->paid_at = now();
+                        $record->save();
+                    }),
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
