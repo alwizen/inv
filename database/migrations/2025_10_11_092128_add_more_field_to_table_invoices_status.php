@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->enum('status', ['unpaid', 'paid'])->default('unpaid');
+            $table->enum('status', ['draft', 'unpaid', 'paid'])->default('draft');
             $table->string('transaction_number')->nullable()->unique();
             $table->timestamp('paid_at')->nullable();
         });

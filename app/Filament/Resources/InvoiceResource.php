@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,16 +79,26 @@ class InvoiceResource extends Resource
                             ->required(),
                     ])
                     ->minItems(1)
+                    ->cloneable()
                     ->addActionLabel('Tambah Item'),
 
                 Forms\Components\Toggle::make('use_ppn')
                     ->label('Gunakan PPN')
+                    ->columnSpanFull()
                     ->default(true),
+
                 Forms\Components\TextInput::make('ppn_percentage')
                     ->label('Persentase PPN (%)')
                     ->numeric()
                     ->default(11)
                     ->visible(fn(Forms\Get $get) => $get('use_ppn')),
+
+                Forms\Components\Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'draft' => 'DRAFT'
+                    ])
+                    ->default('draft'),
             ]);
     }
 
@@ -119,8 +130,13 @@ class InvoiceResource extends Resource
                     ->label('PPN'),
 
                 Tables\Columns\TextColumn::make('status')
-                    ->label('status')
-                    ->badge(),
+                    ->label('Status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'paid' => 'success',
+                        'unpaid' => 'danger',
+                        'draft' => 'warning'
+                    }),
 
                 Tables\Columns\TextColumn::make('transaction_number')
                     ->label('numb'),
@@ -135,33 +151,59 @@ class InvoiceResource extends Resource
                     ->prefix('Rp. '),
             ])
             ->filters([
-                //
-            ])
-            ->actions([
-                Action::make('cetak')
-                    ->label('')
-                    ->tooltip('Print')
-                    ->button()
-                    ->color('success')
-                    // ->outlined()
-                    ->icon('heroicon-o-printer')
-                    ->url(fn(Invoice $record) => route('invoice.pdf', $record))
-                    ->openUrlInNewTab(),
-                Action::make('markAsPaid')
-                    ->label('Mark as Paid')
-                    ->requiresConfirmation()
-                    ->visible(fn(Invoice $record) => $record->status === 'unpaid')
-                    ->action(function (Invoice $record) {
-                        $record->status = 'paid';
-                        $record->transaction_number = Invoice::generateTransactionNumber();
-                        $record->paid_at = now();
-                        $record->save();
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('Status')
+                    ->options([
+                        'paid' => 'Paid',
+                        'unpaid' => 'Unpaid',
+                    ])
+                    ->default(null) // biar default tampil semua
+                    ->placeholder('Semua Status')
+                    ->query(function ($query, $data) {
+                        if ($data['value']) {
+                            $query->where('status', $data['value']);
+                        }
                     }),
+            ])
+
+            ->actions([
                 ActionGroup::make([
+                    Action::make('printV1')
+                        ->label('Cetak v1')
+                        ->tooltip('Cetak v1')
+                        ->url(fn(Invoice $record) => route('invoice.pdf', $record))
+                        ->openUrlInNewTab(),
+
+                    Action::make('printV2')
+                        ->label('Cetak v2')
+                        ->tooltip('Cetak V2')
+                        // ->button()
+                        // ->color('success')
+                        // ->icon('heroicon-o-printer')
+                        ->url(fn(Invoice $record) => route('invoice.pdf2', $record))
+                        ->openUrlInNewTab(),
+                ])->button()
+                    ->label('Cetak')
+                    ->icon(icon: 'heroicon-o-printer'),
+
+                ActionGroup::make([
+                    Action::make('markAsPaid')
+                        ->color('success')
+                        ->label('Mark as Paid')
+                        ->icon(icon: 'heroicon-o-banknotes')
+                        ->requiresConfirmation()
+                        ->visible(fn(Invoice $record) => $record->status === 'unpaid')
+                        ->action(function (Invoice $record) {
+                            $record->status = 'paid';
+                            $record->transaction_number = Invoice::generateTransactionNumber();
+                            $record->paid_at = now();
+                            $record->save();
+                        }),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
