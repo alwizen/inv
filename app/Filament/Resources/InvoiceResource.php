@@ -99,6 +99,10 @@ class InvoiceResource extends Resource
                         'draft' => 'DRAFT'
                     ])
                     ->default('draft'),
+
+                Forms\Components\Textarea::make('note')
+                    ->columnSpanFull()
+
             ]);
     }
 

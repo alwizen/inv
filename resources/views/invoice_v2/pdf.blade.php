@@ -116,19 +116,19 @@
         <div class="ribbon-status">{{ $invoice->status }}</div>
 
         <div class="header">
-            <div class="col logo">
-                @if(optional($invoice->company)->logo_url)
-                    <img src="{{ $invoice->company->logo_url }}" alt="Logo" style="max-height:60px;">
+            {{-- <div class="col logo">
+                @if(optional($invoice->company)->logo)
+                <img src="{{ $invoice->company->logo }}" alt="" style="max-height:60px;">
                 @else
-                    <div style="font-weight:700;font-size:16px;">{{ $invoice->company->name ?? 'Perusahaan' }}</div>
+                <div style="font-weight:700;font-size:16px;">{{ $invoice->company->name ?? '' }}</div>
                 @endif
-            </div>
+            </div> --}}
             <div class="col info">
                 <div class="title">INVOICE</div>
                 <div>#{{ $invoice->invoice_number }}</div>
                 <div class="muted">
-                    Tanggal: {{ optional($invoice->invoice_date)->format('d/m/Y') ?? '-' }} |
-                    Jatuh Tempo: {{ optional($invoice->due_date)->format('d/m/Y') ?? '-' }}
+                    Tanggal Invoice: {{ optional($invoice->invoice_date)->format('d/m/Y') ?? '-' }}
+                    {{ optional($invoice->due_date)->format('d/m/Y') ?? '' }}
                 </div>
                 @if($invoice->status === 'paid' && $invoice->paid_at)
                     <div class="muted">Dibayar: {{ $invoice->paid_at->format('d/m/Y H:i') }}</div>
@@ -208,9 +208,9 @@
             </tr>
         </table>
 
-        {{-- <p style="margin-top:8mm;" class="muted">
-            Catatan: Terima kasih atas kerjasamanya.
-        </p> --}}
+        <p style="margin-top:15mm;" class="muted">
+            Catatan: {{ $invoice->note }}.
+        </p>
     </div>
 </body>
 

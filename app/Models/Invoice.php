@@ -23,7 +23,8 @@ class Invoice extends Model
         'recipient',
         'status',
         'transaction_number',
-        'paid_at'
+        'paid_at',
+        'note'
     ];
 
     protected $casts = [
