@@ -310,7 +310,7 @@
             $labelWatermark = $isPaid ? 'PAID' : 'UNPAID';
             $color = $isPaid
                 ? 'rgba(84, 214, 34, 0.52)' // hijau lembut
-                : 'rgba(81, 90, 78, 0.52)'; // abu lembut
+                : 'rgba(81, 90, 78, 0.18)'; // abu lembut
         @endphp
 
         <div class="wm-status" style="color: {{ $color }}">{{ $labelWatermark }}</div>
