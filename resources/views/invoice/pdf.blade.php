@@ -232,9 +232,10 @@
 
         .lh-logo {
             display: inline-block;
-            height: 34px;
+            height: 70px;
+            width : 200px;
             /* sesuaikan tinggi logo */
-            max-height: 38px;
+            /* max-height: 38px; */
         }
 
         .lh-invoice-no {
@@ -293,7 +294,7 @@
                 @endif
             </td>
             <td class="lh-right">
-                <div class="lh-invoice-no">{{ $invoice->invoice_number }}</div>
+                <div class="lh-invoice-no">Invoice Date : {{ $invoice->invoice_date->format('d/m/Y') }}</div>
             </td>
         </tr>
     </table>
@@ -321,12 +322,13 @@
             <div class="top-info">
                 <div class="info-box">
                     <div class="info-label">Invoice Number: #{{ $invoice->invoice_number }}</div>
+                    {{-- <p>Invoice Date: {{ $invoice->invoice_date->format('d/m/Y') }}</p> --}}
                 </div><br>
 
                 <table class="table-info">
                     <tr>
                         <td class="wrap-text">Invoiced To : {{ $invoice->recipient }}</td>
-                        <td>Invoice Date: {{ $invoice->invoice_date->format('d/m/Y') }}</td>
+                        {{-- <td>Invoice Date: {{ $invoice->invoice_date->format('d/m/Y') }}</td> --}}
                     </tr>
                     <tr>
                         <td class="wrap-text">{{ $invoice->recipient_address }}</td>

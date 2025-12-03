@@ -3,7 +3,7 @@
 use App\Http\Controllers\InvoicePdfController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => view('welcome'));
+// Route::get('/', fn() => view('welcome'));
 
 Route::redirect('/login', '/admin/login', 302); // <-- tambah ini
 
