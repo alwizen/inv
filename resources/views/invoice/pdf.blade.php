@@ -217,10 +217,12 @@
             vertical-align: middle;
         }
 
-        .lh-left {
-            width: 60%;
-            padding: 6px 0;
+        .lh-logo {
+            max-height: 60px;
+            width: auto;
         }
+
+
 
         .lh-right {
             width: 40%;
@@ -233,7 +235,7 @@
         .lh-logo {
             display: inline-block;
             height: 70px;
-            width : 200px;
+            width: 200px;
             /* sesuaikan tinggi logo */
             /* max-height: 38px; */
         }
