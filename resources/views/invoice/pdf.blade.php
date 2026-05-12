@@ -391,6 +391,7 @@
             <!-- Footer Note -->
             <div class="footer-note">
                 <div>{{ $invoice->company->name }}</div>
+                <br>
                 <div>{{ $invoice->company->address }}</div>
                 <!-- <p>Invoice has been generated on {{ now()->format('d F Y') }}</p> -->
             </div>
