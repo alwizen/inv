@@ -96,7 +96,9 @@ class InvoiceResource extends Resource
                 Forms\Components\Select::make('status')
                     ->label('Status')
                     ->options([
-                        'draft' => 'DRAFT'
+                        'draft' => 'DRAFT', 
+                        'unpaid' => 'UNPAID',
+                        'paid' => 'PAID',
                     ])
                     ->default('draft'),
 

@@ -217,10 +217,10 @@
             vertical-align: middle;
         }
 
-        .lh-logo {
-            max-height: 60px;
+        /* .lh-logo {
+            
             width: auto;
-        }
+        } */
 
 
 
@@ -233,11 +233,9 @@
         }
 
         .lh-logo {
-            display: inline-block;
-            height: 70px;
-            width: 200px;
-            /* sesuaikan tinggi logo */
-            /* max-height: 38px; */
+            max-height: 200px;
+            height: 50px;
+            width: auto;
         }
 
         .lh-invoice-no {
@@ -394,7 +392,7 @@
             <div class="footer-note">
                 <div>{{ $invoice->company->name }}</div>
                 <div>{{ $invoice->company->address }}</div>
-                <p>Invoice has been generated on {{ now()->format('d F Y') }}</p>
+                <!-- <p>Invoice has been generated on {{ now()->format('d F Y') }}</p> -->
             </div>
 
         </div>
