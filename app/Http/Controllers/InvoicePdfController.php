@@ -30,4 +30,16 @@ class InvoicePdfController extends Controller
 
         return $pdf->stream('InvoiceV2-' . $invoice->invoice_number . '.pdf');
     }
+
+    public function generateV3(Invoice $invoice)
+    {
+        $pdf = Pdf::loadView('invoice_v3.pdf', ['invoice' => $invoice])
+            ->setPaper('a4', 'portrait')
+            ->setOption('margin-top', 0)
+            ->setOption('margin-bottom', 0)
+            ->setOption('margin-left', 0)
+            ->setOption('margin-right', 0);
+
+        return $pdf->stream('ReceiptV3-' . $invoice->invoice_number . '.pdf');
+    }
 }

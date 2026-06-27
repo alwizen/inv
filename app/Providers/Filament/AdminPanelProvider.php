@@ -28,6 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('/')
             ->login()
             ->brandName('My Invoice')
+            ->brandLogo(asset('img/logo.png'))
+            ->brandLogoHeight('3rem')
+            ->darkMode(false)
             ->colors([
                 'primary' => Color::Red,
             ])

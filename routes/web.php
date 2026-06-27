@@ -9,3 +9,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/invoice/{invoice}/pdf',  [\App\Http\Controllers\InvoicePdfController::class, 'generate'])->name('invoice.pdf');
 Route::get('/invoice/{invoice}/pdf2', [\App\Http\Controllers\InvoicePdfController::class, 'generateV2'])->name('invoice.pdf2');
+Route::get('/invoice/{invoice}/pdf3', [\App\Http\Controllers\InvoicePdfController::class, 'generateV3'])->name('invoice.pdf3');

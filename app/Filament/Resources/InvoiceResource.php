@@ -183,10 +183,13 @@ class InvoiceResource extends Resource
                     Action::make('printV2')
                         ->label('Cetak v2')
                         ->tooltip('Cetak V2')
-                        // ->button()
-                        // ->color('success')
-                        // ->icon('heroicon-o-printer')
                         ->url(fn(Invoice $record) => route('invoice.pdf2', $record))
+                        ->openUrlInNewTab(),
+
+                    Action::make('printV3')
+                        ->label('Cetak v3')
+                        ->tooltip('Cetak V3 thermal')
+                        ->url(fn(Invoice $record) => route('invoice.pdf3', $record))
                         ->openUrlInNewTab(),
                 ])->button()
                     ->label('Cetak')
