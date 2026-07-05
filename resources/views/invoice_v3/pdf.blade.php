@@ -150,8 +150,14 @@
             font-size: 8px;
         }
 
-        .thank-you {
+        .receipt-note {
             margin-top: 2mm;
+            text-align: center;
+            font-size: 8px;
+        }
+
+        .thank-you {
+            margin-top: 1mm;
             text-align: center;
             font-size: 8px;
             font-weight: 700;
@@ -173,9 +179,14 @@
 
                 <div class="info">
                     <div><strong>No Invoice:</strong> #{{ $invoice->invoice_number }}</div>
+                    <div><strong>Status Pembayaran:</strong> {{ $invoice->status === 'paid' ? 'LUNAS' : 'BELUM LUNAS' }}</div>
                     <div><strong>Tanggal:</strong> {{ optional($invoice->invoice_date)->format('d/m/Y') }}</div>
-                    <div><strong>Pelanggan:</strong> {{ $invoice->recipient }}</div>
-                    <div class="muted">{{ $invoice->recipient_address }}</div>
+                    @if (!empty($invoice->recipient))
+                        <div><strong>Pelanggan:</strong> {{ $invoice->recipient }}</div>
+                    @endif
+                    @if (!empty($invoice->recipient_address))
+                        <div class="muted">{{ $invoice->recipient_address }}</div>
+                    @endif
                 </div>
 
                 <table class="items">
@@ -222,7 +233,8 @@
                     <div class="footer"><strong>Catatan:</strong> {{ $invoice->note }}</div>
                 @endif
 
-                <div class="thank-you">Terima kasih</div>
+                <div class="receipt-note">Simpan Struk Ini Sebagai Bukti Transaksi</div>
+                <div class="thank-you">Terima kasih Atas Kunjungan Anda</div>
             </div>
 
             <div class="spacer"></div>
